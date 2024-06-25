@@ -8,13 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, Billable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     protected $guarded = [
         'id',
@@ -58,10 +57,5 @@ class User extends Authenticatable
             foreignPivotKey: 'model_id',
             relatedPivotKey: 'team_id'
         );
-    }
-
-    public function stripeName()
-    {
-        return $this->first_name;
     }
 }

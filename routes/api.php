@@ -28,8 +28,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('subscription', function() {
         $user = auth()->user();
-//        dd($user->subscriptions()->active()->get());
-        $subscription = $user->newSubscription('default', 'price_1MgIzmC769vQvnJaHpnejqBa')
+        $team = \App\Models\Team::find(1);
+//        dd($team->subscriptions()->active()->get());
+        $subscription = $team->newSubscription('default', 'price_1MgIzmC769vQvnJaHpnejqBa')
             ->checkout([
                 'success_url' => 'http://localhost:3000/stripe/success',
                 'cancel_url' => 'http://localhost:3000/stripe/error',
