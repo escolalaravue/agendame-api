@@ -26,6 +26,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('teams/{team:token}', [TeamController::class, 'update']);
     Route::delete('teams/{team:token}', [TeamController::class, 'destroy']);
 
+    Route::get('subscription', function() {
+        $user = auth()->user();
+//        dd($user->subscriptions()->active()->get());
+        $subscription = $user->newSubscription('default', 'price_1MgIzmC769vQvnJaHpnejqBa')
+            ->checkout([
+                'success_url' => 'http://localhost:3000/stripe/success',
+                'cancel_url' => 'http://localhost:3000/stripe/error',
+            ]);
+        dd($subscription->url);
+//        dd($user);
+    });
+
     // Rotas que precisam de team
     Route::middleware(['team'])->group(function () {
     });

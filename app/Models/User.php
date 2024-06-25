@@ -59,4 +59,9 @@ class User extends Authenticatable
             relatedPivotKey: 'team_id'
         );
     }
+
+    public function stripeName()
+    {
+        return $this->first_name;
+    }
 }
