@@ -28,7 +28,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('subscription', function() {
         $user = auth()->user();
-        $team = \App\Models\Team::find(1);
+        $team = \App\Models\Team::find(3);
+        $team->createOrGetStripeCustomer([
+            'name' => $user->first_name,
+            'email' => $user->email,
+        ]);
+
 //        dd($team->subscriptions()->active()->get());
         $subscription = $team->newSubscription('default', 'price_1MgIzmC769vQvnJaHpnejqBa')
             ->checkout([
