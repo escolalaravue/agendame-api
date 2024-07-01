@@ -20,6 +20,8 @@ class SubscriptionController extends Controller
         }
 
         $user = auth()->user();
+        $t = $user->teams;
+        dd($t->toArray());
         $team = \App\Models\Team::query()->where('token', $input['team_token'])->firstOrFail();
 
         $team->createOrGetStripeCustomer([
@@ -29,8 +31,8 @@ class SubscriptionController extends Controller
 
         $subscription = $team->newSubscription($plan->name, $stripePriceId)
             ->checkout([
-                'success_url' => 'http://localhost:3000/stripe/success',
-                'cancel_url' => 'http://localhost:3000/stripe/error',
+                'success_url' => config('app.portal_url') . '/stripe/success',
+                'cancel_url' => config('app.portal_url') . '/stripe/error',
             ]);
 
         return [
