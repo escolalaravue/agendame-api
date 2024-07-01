@@ -20,4 +20,11 @@ class TeamPolicy
 
         return $user->hasRole('admin');
     }
+
+    public function subscribe(User $user, Team $team)
+    {
+        setPermissionsTeamId($team->id);
+
+        return $user->hasRole('admin');
+    }
 }
