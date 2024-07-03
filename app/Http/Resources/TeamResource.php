@@ -17,14 +17,16 @@ class TeamResource extends JsonResource
         setPermissionsTeamId($this->id);
         $user = auth()->user();
         $user->unsetRelation('roles')->unsetRelation('permissions');
+        $isAdmin = $user->hasRole('admin');
 
         return [
             'token' => $this->token,
             'name' => $this->name,
             'roles' => RoleResource::collection($user->roles),
+            'is_admin' => $isAdmin,
             'default' => auth()->user()->default_team_id === $this->id,
 
-            $this->mergeWhen($user->hasRole('admin'), [
+            $this->mergeWhen($isAdmin, [
                 'subscription_type' => $this->subscriptions()->active()->first()?->type ?? 'Freemium',
                 'has_subscription' => $this->subscriptions()->active()->exists(),
             ]),
