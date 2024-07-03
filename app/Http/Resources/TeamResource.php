@@ -23,6 +23,11 @@ class TeamResource extends JsonResource
             'name' => $this->name,
             'roles' => RoleResource::collection($user->roles),
             'default' => auth()->user()->default_team_id === $this->id,
+
+            $this->mergeWhen($user->hasRole('admin'), [
+                'subscription_type' => $this->subscriptions()->active()->first()?->type ?? 'Freemium',
+                'has_subscription' => $this->subscriptions()->active()->exists(),
+            ]),
         ];
     }
 }
