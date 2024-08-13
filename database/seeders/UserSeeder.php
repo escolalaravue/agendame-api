@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Team;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -12,11 +14,15 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory(10)->create();
+        \App\Models\User::factory(10)
+            ->create()->each(function($user) {
+                $team = Team::query()->create([
+                    'token' => Str::uuid(),
+                    'name' => $user->first_name . " Team"
+                ]);
 
-//        \App\Models\User::factory()->create([
-//            'first_name' => 'Test User',
-//            'email' => 'test@example.com',
-//        ]);
+                setPermissionsTeamId($team->id);
+                $user->assignRole('admin');
+            });
     }
 }

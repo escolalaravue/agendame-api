@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
     {
          $schedule->command('migrate:fresh --seed --force')
              ->timezone('America/Sao_Paulo')
-             ->daily();
+             ->daily()
+             ->environments(['demo']);
     }
 
     /**
