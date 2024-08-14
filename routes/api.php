@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Plan\PlanController;
 use App\Http\Controllers\Subscription\SubscriptionController;
 use App\Http\Controllers\Team\TeamController;
+use App\Http\Controllers\Team\TeamMemberController;
 use App\Http\Controllers\User\MeController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Rotas que precisam de team
     Route::middleware(['team'])->group(function () {
+        Route::get('team-members', [TeamMemberController::class, 'index']);
     });
 });
 
