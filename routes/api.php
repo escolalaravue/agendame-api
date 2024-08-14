@@ -33,6 +33,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Rotas que precisam de team
     Route::middleware(['team'])->group(function () {
         Route::get('team-members', [TeamMemberController::class, 'index']);
+        Route::put('team-members/{user}', [TeamMemberController::class, 'update']);
         Route::delete('team-members/{user}', [TeamMemberController::class, 'kick']);
     });
 });
