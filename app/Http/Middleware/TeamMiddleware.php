@@ -8,6 +8,7 @@ use App\Exceptions\UserDoesntHaveRoleException;
 use App\Models\Team;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpFoundation\Response;
 
 class TeamMiddleware
@@ -39,6 +40,10 @@ class TeamMiddleware
         if (!auth()->user()->roles()->exists()) {
             throw new UserDoesntHaveRoleException();
         }
+
+        App::singleton('currentTeam', function() use ($team) {
+            return $team;
+        });
 
         return $next($request);
     }

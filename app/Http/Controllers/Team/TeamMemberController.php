@@ -15,7 +15,8 @@ class TeamMemberController extends Controller
 {
     public function index()
     {
-        $team = Team::find(getPermissionsTeamId());
+        $team = app('currentTeam');
+        $this->authorize('memberIndex', $team);
 
         return TeamMemberResource::collection($team->users);
     }
@@ -24,7 +25,9 @@ class TeamMemberController extends Controller
     {
         $input = $request->validated();
 
-        $team = Team::find(getPermissionsTeamId());
+        $team = app('currentTeam');
+        $this->authorize('memberUpdate', $team);
+
         $isMember = $team->whereHas('users', function($query) use ($user) {
             $query->whereId($user->id);
         })->exists();
@@ -38,7 +41,9 @@ class TeamMemberController extends Controller
 
     public function kick(User $user)
     {
-        $team = Team::find(getPermissionsTeamId());
+        $team = app('currentTeam');
+        $this->authorize('memberKick', $team);
+
         $isMember = $team->whereHas('users', function($query) use ($user) {
             $query->whereId($user->id);
         })->exists();

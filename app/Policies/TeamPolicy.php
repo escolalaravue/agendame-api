@@ -27,4 +27,25 @@ class TeamPolicy
 
         return $user->hasRole('admin');
     }
+
+    public function memberIndex(User $user, Team $team)
+    {
+        setPermissionsTeamId($team->id);
+
+        return $user->hasRole('admin');
+    }
+
+    public function memberUpdate(User $user, Team $team)
+    {
+        setPermissionsTeamId($team->id);
+
+        return $user->hasRole('admin');
+    }
+
+    public function memberKick(User $user, Team $team)
+    {
+        setPermissionsTeamId($team->id);
+
+        return $user->hasRole('admin');
+    }
 }
