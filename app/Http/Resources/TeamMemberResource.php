@@ -19,7 +19,7 @@ class TeamMemberResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email' => $this->email,
-            'roles' => RoleResource::collection($this->roles),
+            'role' => $this->roles[0]->name,
         ];
     }
 }

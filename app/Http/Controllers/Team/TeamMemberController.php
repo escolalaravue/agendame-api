@@ -36,7 +36,7 @@ class TeamMemberController extends Controller
             throw new IsNotATeamMemberException();
         }
 
-        $user->syncRoles($input['role_id']);
+        $user->syncRoles($input['role']);
     }
 
     public function kick(User $user)
