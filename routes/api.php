@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Plan\PlanController;
 use App\Http\Controllers\Subscription\SubscriptionController;
 use App\Http\Controllers\Team\TeamController;
+use App\Http\Controllers\Team\TeamInvitationController;
 use App\Http\Controllers\Team\TeamMemberController;
 use App\Http\Controllers\User\MeController;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('team-members', [TeamMemberController::class, 'index']);
         Route::put('team-members/{user}', [TeamMemberController::class, 'update']);
         Route::delete('team-members/{user}', [TeamMemberController::class, 'kick']);
+
+        Route::post('team-invitations', [TeamInvitationController::class, 'store']);
     });
 });
 

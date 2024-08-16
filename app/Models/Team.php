@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Cashier\Billable;
 
 class Team extends Model
@@ -24,5 +25,13 @@ class Team extends Model
             foreignPivotKey: 'team_id',
             relatedPivotKey: 'model_id'
         );
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function invitations(): HasMany
+    {
+        return $this->hasMany(TeamInvitation::class);
     }
 }
