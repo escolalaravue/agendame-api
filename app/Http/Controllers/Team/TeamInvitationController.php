@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Team;
 
+use App\Events\UserInvited;
 use App\Exceptions\UserHasBeenInvitedException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Team\TeamInvitationStoreRequest;
@@ -13,9 +14,11 @@ class TeamInvitationController extends Controller
 {
     public function store(TeamInvitationStoreRequest $request)
     {
+        $team = app('currentTeam');
+        $this->authorize('invitationStore', $team);
+
         $input = $request->validated();
         $input['token'] = Str::uuid();
-        $team = app('currentTeam');
 
         $email = $input['email'];
         $isInvited = $team
@@ -32,6 +35,8 @@ class TeamInvitationController extends Controller
         }
 
         $invitation = $team->invitations()->create($input);
+
+        UserInvited::dispatch($invitation);
 
         return new TeamInvitationResource($invitation);
     }
