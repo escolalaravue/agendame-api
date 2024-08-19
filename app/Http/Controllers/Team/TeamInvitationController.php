@@ -23,6 +23,11 @@ class TeamInvitationController extends Controller
         return TeamInvitationResource::collection($invitations);
     }
 
+    public function show(TeamInvitation $teamInvitation)
+    {
+        return new TeamInvitationResource($teamInvitation);
+    }
+
     public function store(TeamInvitationStoreRequest $request)
     {
         $team = app('currentTeam');

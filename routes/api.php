@@ -39,6 +39,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::get('team-invitations', [TeamInvitationController::class, 'index']);
         Route::post('team-invitations', [TeamInvitationController::class, 'store']);
+        Route::get('team-invitations/{teamInvitation:token}', [TeamInvitationController::class, 'show'])
+            ->withoutMiddleware(['team', 'auth:sanctum']);
         Route::delete('team-invitations/{teamInvitation}', [TeamInvitationController::class, 'destroy']);
     });
 });
