@@ -23,7 +23,7 @@ class TeamInvitationStoreRequest extends FormRequest
     {
         return [
             'email' => 'required|email',
-            'role_id' => 'required|exists:roles,id',
+            'role' => 'required|exists:roles,name',
         ];
     }
 }

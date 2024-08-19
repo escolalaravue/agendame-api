@@ -10,6 +10,7 @@ use App\Http\Resources\TeamInvitationResource;
 use App\Models\TeamInvitation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class TeamInvitationController extends Controller
 {
@@ -30,6 +31,7 @@ class TeamInvitationController extends Controller
 
     public function store(TeamInvitationStoreRequest $request)
     {
+        sleep(2);
         $team = app('currentTeam');
         $this->authorize('invitationStore', $team);
 
@@ -50,6 +52,7 @@ class TeamInvitationController extends Controller
             throw new UserHasBeenInvitedException();
         }
 
+        $input['role_id'] = Role::query()->whereName($input['role'])->first()->id;
         $invitation = $team->invitations()->create($input);
 
         UserInvited::dispatch($invitation);
