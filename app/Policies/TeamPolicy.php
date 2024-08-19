@@ -62,4 +62,11 @@ class TeamPolicy
 
         return $user->hasRole('admin');
     }
+
+    public function invitationDestroy(User $user, Team $team)
+    {
+        setPermissionsTeamId($team->id);
+
+        return $user->hasRole('admin');
+    }
 }

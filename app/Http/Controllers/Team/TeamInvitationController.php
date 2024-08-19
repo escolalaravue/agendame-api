@@ -7,6 +7,7 @@ use App\Exceptions\UserHasBeenInvitedException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Team\TeamInvitationStoreRequest;
 use App\Http\Resources\TeamInvitationResource;
+use App\Models\TeamInvitation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -20,8 +21,8 @@ class TeamInvitationController extends Controller
 
         $invitations = $team->invitations;
         return TeamInvitationResource::collection($invitations);
-
     }
+
     public function store(TeamInvitationStoreRequest $request)
     {
         $team = app('currentTeam');
@@ -49,5 +50,13 @@ class TeamInvitationController extends Controller
         UserInvited::dispatch($invitation);
 
         return new TeamInvitationResource($invitation);
+    }
+
+    public function destroy(TeamInvitation $teamInvitation)
+    {
+        $team = app('currentTeam');
+        $this->authorize('invitationDestroy', $team);
+
+        $teamInvitation->delete();
     }
 }
