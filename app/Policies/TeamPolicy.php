@@ -49,6 +49,13 @@ class TeamPolicy
         return $user->hasRole('admin');
     }
 
+    public function invitationIndex(User $user, Team $team)
+    {
+        setPermissionsTeamId($team->id);
+
+        return $user->hasRole('admin');
+    }
+
     public function invitationStore(User $user, Team $team)
     {
         setPermissionsTeamId($team->id);

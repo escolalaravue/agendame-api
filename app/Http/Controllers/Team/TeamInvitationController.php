@@ -12,6 +12,16 @@ use Illuminate\Support\Str;
 
 class TeamInvitationController extends Controller
 {
+
+    public function index()
+    {
+        $team = app('currentTeam');
+        $this->authorize('invitationIndex', $team);
+
+        $invitations = $team->invitations;
+        return TeamInvitationResource::collection($invitations);
+
+    }
     public function store(TeamInvitationStoreRequest $request)
     {
         $team = app('currentTeam');
