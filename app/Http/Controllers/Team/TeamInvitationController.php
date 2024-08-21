@@ -11,14 +11,20 @@ use App\Http\Resources\TeamInvitationPublicResource;
 use App\Http\Resources\TeamInvitationResource;
 use App\Models\TeamInvitation;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
 class TeamInvitationController extends Controller
 {
 
-    public function index()
+    /**
+     * @return AnonymousResourceCollection
+     * @throws AuthorizationException
+     */
+    public function index(): AnonymousResourceCollection
     {
         $team = app('currentTeam');
         $this->authorize('invitationIndex', $team);
@@ -27,12 +33,21 @@ class TeamInvitationController extends Controller
         return TeamInvitationResource::collection($invitations);
     }
 
-    public function show(TeamInvitation $teamInvitation)
+    /**
+     * @param TeamInvitation $teamInvitation
+     * @return TeamInvitationPublicResource
+     */
+    public function show(TeamInvitation $teamInvitation): TeamInvitationPublicResource
     {
         return new TeamInvitationPublicResource($teamInvitation);
     }
 
-    public function accept(TeamInvitation $teamInvitation)
+    /**
+     * @param TeamInvitation $teamInvitation
+     * @return void
+     * @throws UserNotFoundException
+     */
+    public function accept(TeamInvitation $teamInvitation): void
     {
         $user = User::query()->whereEmail($teamInvitation->email)->first();
         if (!$user) {
@@ -45,7 +60,13 @@ class TeamInvitationController extends Controller
         $teamInvitation->delete();
     }
 
-    public function store(TeamInvitationStoreRequest $request)
+    /**
+     * @param TeamInvitationStoreRequest $request
+     * @return TeamInvitationResource
+     * @throws AuthorizationException
+     * @throws UserHasBeenInvitedException
+     */
+    public function store(TeamInvitationStoreRequest $request): TeamInvitationResource
     {
         $team = app('currentTeam');
         $this->authorize('invitationStore', $team);
@@ -75,7 +96,12 @@ class TeamInvitationController extends Controller
         return new TeamInvitationResource($invitation);
     }
 
-    public function destroy(TeamInvitation $teamInvitation)
+    /**
+     * @param TeamInvitation $teamInvitation
+     * @return void
+     * @throws AuthorizationException
+     */
+    public function destroy(TeamInvitation $teamInvitation): void
     {
         $team = app('currentTeam');
         $this->authorize('invitationDestroy', $team);

@@ -8,12 +8,18 @@ use App\Http\Requests\Team\TeamMemberUpdateRequest;
 use App\Http\Resources\TeamMemberResource;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Spatie\Permission\Models\Role;
 
 class TeamMemberController extends Controller
 {
-    public function index()
+    /**
+     * @return AnonymousResourceCollection
+     * @throws AuthorizationException
+     */
+    public function index(): AnonymousResourceCollection
     {
         $team = app('currentTeam');
         $this->authorize('memberIndex', $team);
@@ -21,7 +27,14 @@ class TeamMemberController extends Controller
         return TeamMemberResource::collection($team->users);
     }
 
-    public function update(User $user, TeamMemberUpdateRequest $request)
+    /**
+     * @param User $user
+     * @param TeamMemberUpdateRequest $request
+     * @return void
+     * @throws IsNotATeamMemberException
+     * @throws AuthorizationException
+     */
+    public function update(User $user, TeamMemberUpdateRequest $request): void
     {
         $input = $request->validated();
 
@@ -39,7 +52,13 @@ class TeamMemberController extends Controller
         $user->syncRoles($input['role']);
     }
 
-    public function kick(User $user)
+    /**
+     * @param User $user
+     * @return void
+     * @throws AuthorizationException
+     * @throws IsNotATeamMemberException
+     */
+    public function kick(User $user): void
     {
         $team = app('currentTeam');
         $this->authorize('memberKick', $team);
