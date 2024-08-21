@@ -7,6 +7,7 @@ use App\Exceptions\UserHasBeenInvitedException;
 use App\Exceptions\UserNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Team\TeamInvitationStoreRequest;
+use App\Http\Resources\TeamInvitationPublicResource;
 use App\Http\Resources\TeamInvitationResource;
 use App\Models\TeamInvitation;
 use App\Models\User;
@@ -28,7 +29,7 @@ class TeamInvitationController extends Controller
 
     public function show(TeamInvitation $teamInvitation)
     {
-        return new TeamInvitationResource($teamInvitation);
+        return new TeamInvitationPublicResource($teamInvitation);
     }
 
     public function accept(TeamInvitation $teamInvitation)
@@ -46,7 +47,6 @@ class TeamInvitationController extends Controller
 
     public function store(TeamInvitationStoreRequest $request)
     {
-        sleep(2);
         $team = app('currentTeam');
         $this->authorize('invitationStore', $team);
 

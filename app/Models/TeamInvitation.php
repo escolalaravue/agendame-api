@@ -20,4 +20,12 @@ class TeamInvitation extends Model
     {
         return $this->belongsTo(Role::class);
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function team(): BelongsTo
+    {
+        return $this->belongsTo(Team::class);
+    }
 }
