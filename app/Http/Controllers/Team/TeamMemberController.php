@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Team;
 
+use App\Exceptions\CantDeleteLastAdminException;
 use App\Exceptions\IsNotATeamMemberException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Team\TeamMemberUpdateRequest;
@@ -57,18 +58,22 @@ class TeamMemberController extends Controller
      * @return void
      * @throws AuthorizationException
      * @throws IsNotATeamMemberException
+     * @throws CantDeleteLastAdminException
      */
     public function kick(User $user): void
     {
         $team = app('currentTeam');
         $this->authorize('memberKick', $team);
 
-        $isMember = $team->whereHas('users', function($query) use ($user) {
-            $query->whereId($user->id);
-        })->exists();
-
-        if (!$isMember) {
+        if ($user->roles()->doesntExist()) {
             throw new IsNotATeamMemberException();
+        }
+
+        if ($user->hasRole('admin')) {
+            $adminCount = $team->usersAdmin->count();
+            if ($adminCount === 1) {
+                throw new CantDeleteLastAdminException();
+            }
         }
 
         Role::all()->pluck('id')->each(function($role) use ($user) {

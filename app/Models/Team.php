@@ -28,6 +28,14 @@ class Team extends Model
     }
 
     /**
+     * @return BelongsToMany
+     */
+    public function usersAdmin(): BelongsToMany
+    {
+        return $this->users()->wherePivotIn('role_id', [1]);
+    }
+
+    /**
      * @return HasMany
      */
     public function invitations(): HasMany
